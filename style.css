@@ -1,0 +1,17 @@
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;                  /* make body a flexbox */
+  justify-content: center;        /* center canvas horizontally */
+  align-items: center;            /* center canvas vertically */
+  height: 100vh;                  /* full screen height */
+  background: white;               /* dark background for contrast */
+}
+
+#gameCanvas {
+  background: gray;               /* road background */
+  border: 3px solid black;        /* border around game */
+  /* width: 400px;                   fixed width */
+  /* height: 100vh;                  full viewport height */
+  display: block;                 /* remove inline gap */
+}
