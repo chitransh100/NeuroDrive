@@ -8,3 +8,10 @@ const ctx = canvas.getContext("2d");
 const car = new Car(100,100,30,50); //object of class car
 car.draw(ctx) //a methd in the car class 
 
+animate();
+
+function animate(){
+    car.update();
+    car.draw(ctx);
+    requestAnimationFrame(animate);
+}

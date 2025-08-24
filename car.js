@@ -10,6 +10,15 @@ class Car{
         //controls will be the object defining the movement of the car 
     }
 
+    update(){
+        if(this.controls.forward){
+            this.y -= 2; //the y increases downwards 
+        }
+        if(this.controls.reverse){
+            this.y += 1; //have to use "this" keyword
+        }
+    }
+
     draw(ctx){
         //takes ctx as a input which issues us the drawing commands
         ctx.beginPath();  //starting new shape (forget previous shapes )
