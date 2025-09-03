@@ -1,11 +1,16 @@
 const canvas = document.getElementById("gameCanvas")  //refrencing the canvas we defined in the html 
 // canvas.height = window.innerHeight;
-canvas.width = 200;
+canvas.width = 300;
 //  <canvas> element used for drawing graphics on a web page, the context refers to the specific rendering API or environment that provides the methods and properties for performing drawing operations.
 // Essentially, the <canvas> element itself acts as the drawing surface, while the context is the "toolset" you use to actually draw on that surface.
 const ctx = canvas.getContext("2d");
 // canvas.getContext('2d'), you are requesting an object that provides a set of methods and properties specifically designed for drawing 2D shapes, text, and images. This object, typically assigned to a variable like ctx, then becomes your interface for all your 2D drawing operations on that particular canvas.
-const car = new Car(100,100,30,50); //object of class car
+
+
+
+const road = new Road(canvas.width/2, canvas.width * 0.96) //(center, width * so that the lines of the road has some margin )
+const car = new Car(road.getLaneWidth(1), 100, 30, 50);
+// const car = new Car(100,100,30,50); //object of class car
 car.draw(ctx) //a methd in the car class 
 
 animate();
@@ -13,7 +18,12 @@ animate();
 function animate(){
     car.update(); //another funtion which runs when the arrowkeys are triggered 
     canvas.height = window.innerHeight; //putting this here to handle the trail effect (wipes the canvas in every frame);
+    ctx.save();
+    ctx.translate(0,-car.y+canvas.height*0.7)
+    road.draw(ctx);
     car.draw(ctx); //function in the car.js
+
+    ctx.restore();
     requestAnimationFrame(animate); //browser-provided function that you use to create smooth animations in JavaScript. Instead of using setInterval or setTimeout to run your animation loop (which can cause stuttering), you use requestAnimationFrame(). The browser then calls your function just before the next repaint, giving you the smoothest and most efficient update.
 
 }

@@ -29,6 +29,10 @@ class Car {
   }
 
   update() {
+    this.#move();
+  }
+
+  #move(){ 
     //for up and down
     if (this.controls.forward) {
       // this.y -= 2; the y increases downwards -> we need some acceleration here
@@ -64,11 +68,11 @@ class Car {
     
       if (this.controls.left) {
         // this.x -= 2;
-        this.angle += 0.03*flip; //moving the line towards teh y axis
+        this.angle += 0.02*flip; //moving the line towards teh y axis
       }
       if (this.controls.right) {
         // this.x += 2;
-        this.angle -= 0.03*flip ;
+        this.angle -= 0.02*flip ;
       }
     }
 
