@@ -41,6 +41,22 @@ function getIntersection(A, B, C, D) {
             };
         }
     }
-    console.log("returned null")
+    // console.log("returned null")
     return null; // no intersection
+}
+
+
+function polyIntersect(poly1, poly2){
+  for (let i=0; i<poly1.length; i++){
+    for (let j=0; j<poly2.length; j++){
+      const touch = getIntersection( //will get the intersection of the lines and give us teh result in touch 
+        poly1[i],
+        poly1[(i+1)%poly1.length], //check for every edge by making a line using points in a cylindrical way 
+        poly2[j],
+        poly2[(j+1)%poly2.length]
+      );
+      if (touch) return true; // returns object {x,y,offset}
+    }
+  }
+  return false;
 }
