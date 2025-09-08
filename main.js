@@ -11,15 +11,17 @@ const ctx = canvas.getContext("2d");
 const road = new Road(canvas.width/2, canvas.width * 0.96) //(center, width * so that the lines of the road has some margin )
 const car = new Car(road.getLaneWidth(1), 100, 30, 50);
 // const car = new Car(100,100,30,50); //object of class car
-car.draw(ctx) //a methd in the car class 
+// car.draw(ctx) //a methd in the car class // dont draw the car outside first update the car to acquire the positions and then draw the cars 
 
 animate();
 
 function animate(){
-    car.update(); //another funtion which runs when the arrowkeys are triggered 
+    car.update(road.border); //another funtion which runs when the arrowkeys are triggered 
     canvas.height = window.innerHeight; //putting this here to handle the trail effect (wipes the canvas in every frame);
     ctx.save();
-    ctx.translate(0,-car.y+canvas.height*0.7)
+    ctx.translate(0,-car.y+canvas.height*0.8)//shifts the origin to these points 
+    // You’re shifting the entire coordinate system upward by car.y.
+    // So instead of redrawing the car far down the canvas, you bring the world up so the car looks like it stayed in view.
     road.draw(ctx);
     car.draw(ctx); //function in the car.js
 

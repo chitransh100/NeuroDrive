@@ -18,8 +18,10 @@ class Road {
     const bottomRight = {x: this.right, y: this.bottom};
 
     this.border = [
-        [topLeft, topRight],
-        [bottomLeft, bottomRight]
+        // [topLeft, topRight],
+        // [bottomLeft, bottomRight] //this is wrong because to calculate the intersection point we need the line from top to bottom and then from left to right 
+        [topLeft,bottomLeft ],
+        [topRight, bottomRight]
     ];
 
   }

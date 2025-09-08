@@ -22,14 +22,15 @@ class Car {
     // |      \
     // |
     // y-axis
-
+    this.sensor = new Sensor(this);//creating a new sensor and passing the car to it so that when the car is created the sensor is already created automatically 
     //till now there are no controls of the car so create a new object defining the controls
     this.controls = new Controls();
     //controls will be the object defining the movement of the car
   }
 
-  update() {
+  update(roadborder) {
     this.#move();
+    this.sensor.update(roadborder); // so that the sensor gets update when the car is getting updated
   }
 
   #move(){ 
@@ -102,5 +103,7 @@ class Car {
     ctx.fill(); //fills the rectangle with the current fillStyle (color).
     ctx.restore(); //????????????????
     //With save/restore: each shape can be drawn in its own local coordinate system.
+
+    this.sensor.draw(ctx) //this is to draw the sensor when ever the car is drwan and updated to draw 
   }
 }

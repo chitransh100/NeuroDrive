@@ -32,7 +32,7 @@ class Controls {
                     this.right = true;
                     break;
             }
-            console.table(this) //console the controls object 
+            
         };
 
         // (Alternative approach)
@@ -58,6 +58,6 @@ class Controls {
                     break;
             }
         };
-        // console.log(this);
+
     }
 }

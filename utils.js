@@ -15,3 +15,32 @@ function lerp(A, B, t) {
 // Lane divider 2: lerp(left, right, 2/3) → 2/3 across road
 // Right border: lerp(left, right, 3/3) → right edge
 // So lerp makes sure lines are perfectly spaced, no matter how wide the road is.
+
+function getIntersection(A, B, C, D) {
+    // Line AB represented as A + t(B - A)
+    // Line CD represented as C + u(D - C)
+    
+    const tTop = (D.x - C.x) * (A.y - C.y) - (D.y - C.y) * (A.x - C.x);
+    const uTop = (C.y - A.y) * (A.x - B.x) - (C.x - A.x) * (A.y - B.y);
+    const bottom = (D.y - C.y) * (B.x - A.x) - (D.x - C.x) * (B.y - A.y);
+
+    if (bottom !== 0) {
+        
+        const t = tTop / bottom;
+        const u = uTop / bottom;
+        
+
+        // t between 0 and 1 means the intersection is on segment AB
+        // u between 0 and 1 means the intersection is on segment CD
+        if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
+            console.log("here ")
+            return {
+                x: A.x + t * (B.x - A.x),
+                y: A.y + t * (B.y - A.y),
+                offset: t
+            };
+        }
+    }
+    console.log("returned null")
+    return null; // no intersection
+}
