@@ -1,7 +1,25 @@
+const carColors = [
+  "#FF5733", // orange-red
+  "#33FF57", // green
+  "#3357FF", // blue
+  "#F1C40F", // yellow
+  "#9B59B6", // purple
+  "#E67E22", // orange
+  "#1ABC9C", // turquoise
+  "#E74C3C", // red
+  "#2ECC71", // emerald green
+  "#3498DB", // sky blue
+  "#7D3C98", // violet
+  "#27AE60", // dark green
+  "#F39C12", // golden orange
+  "#C0392B", // crimson
+  "#16A085"  // teal
+];
 class Car {
   //no need to declare the variables in class
   //dealing with 4th qudrant here
-  constructor(x, y, width, height) {
+  constructor(x, y, width, height, controlType) {
+    //introduced the controlType so that we can diffrentiate between the original and traffic car 
     this.x = x;
     this.y = y;
     this.width = width;
@@ -11,9 +29,14 @@ class Car {
     this.acceleration = 0.2;
     //introducing friction to stop the car
     this.friction = 0.05;
-    this.maxSpeed = 3;
+    if(controlType == "KEYS"){
+      this.maxSpeed = 3;
+    }else{
+      this.maxSpeed = 2;
+    }
     //introduce an angle
     this.angle = 0; //from the x axis
+    this.color;
 
     // ---------------------------> x asix
     // |\  angle from the x-axis
@@ -22,29 +45,45 @@ class Car {
     // |      \
     // |
     // y-axis
-    this.sensor = new Sensor(this);//creating a new sensor and passing the car to it so that when the car is created the sensor is already created automatically 
+    if(controlType == "KEYS"){
+       this.sensor = new Sensor(this);//creating a new sensor and passing the car to it so that when the car is created the sensor is already created automatically 
+    }else{
+      this.color = carColors[Math.floor(Math.random()*carColors.length)]
+    }
+   
     //till now there are no controls of the car so create a new object defining the controls
-    this.controls = new Controls();
+    this.controls = new Controls(controlType); //passing such that there must be a object for controls but differenct controls for every car 
     //controls will be the object defining the movement of the car
     this.damaged = false; //detecting road borders and the cars did they collide 
   }
 
-  update(roadborder) {
+  update(roadborder, traffic) {
+    
     if(!this.damaged){ //dont move teh car if its damaged 
       this.#move();
       this.polygon = this.#createPolygon(); //creating a polygon to know the coordinates of a the car 
-      this.damaged = this.#assessDamage(roadborder) //function to detect any intersection between the car borders and the borders;
+      this.damaged = this.#assessDamage(roadborder, traffic) //function to detect any intersection between the car borders and the borders;
     }
-    this.sensor.update(roadborder); // so that the sensor gets update when the car is getting updated
+    // if(controlType == "KEYS") we cant check for the controlTypes in an other function
+    if(this.sensor) //check if the sensor is present or not rather than 
+    this.sensor.update(roadborder, traffic); // so that the sensor gets update when the car is getting updated
   }
 
-  #assessDamage(roadborder){
+  #assessDamage(roadborder, traffic){
     for(let i=0; i<roadborder.length; i++){
       if(polyIntersect(this.polygon, roadborder[i])){ //another utility function to detect intesection between the car borders and the road border lines 
         //roadborders is array of array so we pass roadborders[i] to check with the first raodborder and teh the other one 
         return true;
       }
     }
+    //polyIntersect takes only 2 parameters so we have to check for the traffic 
+    for(let i=0; i<traffic.length; i++){
+      if(polyIntersect(this.polygon, traffic[i].polygon)){ //another utility function to detect intesection between the car borders and the road border lines 
+        //roadborders is array of array so we pass roadborders[i] to check with the first raodborder and teh the other one 
+        return true;
+      }
+    }
+
     return false;
   }
 
@@ -122,12 +161,20 @@ class Car {
     this.x -= Math.sin(this.angle) * this.speed; //so as the distance will have
   }
 
+  
+
   draw(ctx) {
     if(this.damaged){
       ctx.fillStyle = "red";
     }
     else{
+      if(this.sensor)
       ctx.fillStyle = "#32CD32";
+      else{
+        // ctx.fillStyle = "black"
+        ctx.fillStyle = this.color;
+      }
+
     }
     ctx.beginPath();
     ctx.moveTo(this.polygon[0].x , this.polygon[0].y);
@@ -159,7 +206,8 @@ class Car {
     // ctx.fill(); //fills the rectangle with the current fillStyle (color).
     // ctx.restore(); //????????????????
     // //With save/restore: each shape can be drawn in its own local coordinate system.
-
+    // if(controlType == "KEYS") same here line 46
+    if(this.sensor) //if the sensor object is created then only we can have teh sensors on a car 
     this.sensor.draw(ctx) //this is to draw the sensor when ever the car is drwan and updated to draw 
   }
 }

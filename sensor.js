@@ -8,29 +8,44 @@ class Sensor{
         this.rays=[];  // storing all the rays inside this ray array;
         this.readings=[]; //to store the minimum distance of the multiple intersection of the rays and the objects
     }
-    update(roadborder){
+    update(roadborder, traffic){
         this.#rayCast(); //return starting and the end point of the rays (each)
         this.readings = []; //initialise the array here 
         for(let i= 0; i<this.rayCount; i++){ //iterate through all rays and find the intersection points
             this.readings.push(
-                this.#getReading(this.rays[i],roadborder) //will get all minimum touch distance for all the rays and the borders 
+                this.#getReading(this.rays[i],roadborder, traffic) //will get all minimum touch distance for all the rays and the borders 
             );
         } 
     } 
 
-    #getReading(ray,roadborder){
+    #getReading(ray,roadborder,traffic){
         this.touches = [];
         for(let i=0; i<roadborder.length; i++){
             const touch = getIntersection( //utility function returning (x,y,offset) (the coordinates and the distance between teh intersection and the ray[0] i.e. the starting point of ray)
-                ray[0],
+                ray[0], //see line 16 we are passing the ray[i] in this and we are accessing ray[i][0] (start) and ray[i][1] (end);
                 ray[1],
                 roadborder[i][0],
                 roadborder[i][1],
             ) 
             if(touch){
                 this.touches.push(touch)
+            }       
+        }
+
+        for(let i=0; i<traffic?.length; i++){ //same here if traffic == null return undefined instead of throwing error 
+            const poly = traffic[i].polygon;
+            console.log(poly)
+            for(let j=0; j<poly?.length; j++){
+                const value = getIntersection(
+                    ray[0],
+                    ray[1],
+                    poly[j],
+                    poly[(j+1)%poly.length]
+                );
+                if(value){
+                    this.touches.push(value);
+                }
             }
-            
         }
 
         if(this.touches.length === 0){

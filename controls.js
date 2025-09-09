@@ -1,5 +1,6 @@
 class Controls {
-    constructor(){
+    constructor(contolTypes){
+
         this.forward = false;
         this.reverse = false;
         this.left = false;
@@ -7,7 +8,11 @@ class Controls {
 
         // Call the private method (#addKeyboardListeners)
         // This will attach the event listeners so the class
-        this.#addKeyboardListeners();
+        if(contolTypes == "KEYS"){
+            this.#addKeyboardListeners();
+        }else{
+            this.forward = true; // making this true only means that other cars will have the constant speed equal to the original car and we cant chase it;
+        }
     }
 
     // Private method (#) - cannot be called outside the class.

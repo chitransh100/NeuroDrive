@@ -48,7 +48,7 @@ function getIntersection(A, B, C, D) {
 
 function polyIntersect(poly1, poly2){
   for (let i=0; i<poly1.length; i++){
-    for (let j=0; j<poly2.length; j++){
+    for (let j=0; j<poly2?.length; j++){//if poly2 is not null or undefined, give me .length. Otherwise, just return undefined instead of throwing an error.”
       const touch = getIntersection( //will get the intersection of the lines and give us teh result in touch 
         poly1[i],
         poly1[(i+1)%poly1.length], //check for every edge by making a line using points in a cylindrical way 

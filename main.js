@@ -9,20 +9,30 @@ const ctx = canvas.getContext("2d");
 
 
 const road = new Road(canvas.width/2, canvas.width * 0.96) //(center, width * so that the lines of the road has some margin )
-const car = new Car(road.getLaneWidth(1), 100, 30, 50);
+const car = new Car(road.getLaneWidth(1), 100, 30, 50, "KEYS"); //introducing "KEYS" to impement the key functions of our car
+const traffic = [
+    new Car(road.getLaneWidth(1), -100 ,30 ,50, "Traffic") //introducin traffic to implement traffic properties of it 
+]
 // const car = new Car(100,100,30,50); //object of class car
 // car.draw(ctx) //a methd in the car class // dont draw the car outside first update the car to acquire the positions and then draw the cars 
 
 animate();
 
 function animate(){
-    car.update(road.border); //another funtion which runs when the arrowkeys are triggered 
+    car.update(road.border, traffic); //another funtion which runs when the arrowkeys are triggered ,  traffic is also passed in here so that we can detect the collision of the car with the traffic 
+    for(let i=0; i<traffic.length; i++){ //this will iterate through each car and udate its position first
+        //but this will overright the update function and we wont be able to actually control our original car 
+        traffic[i].update(road.border, []); // here only an empty array is passed so that the traffic dont check the collision with themself and get destroyed
+    }
     canvas.height = window.innerHeight; //putting this here to handle the trail effect (wipes the canvas in every frame);
     ctx.save();
     ctx.translate(0,-car.y+canvas.height*0.8)//shifts the origin to these points 
     // You’re shifting the entire coordinate system upward by car.y.
     // So instead of redrawing the car far down the canvas, you bring the world up so the car looks like it stayed in view.
     road.draw(ctx);
+    for(let i=0; i<traffic.length; i++){ //this will iterate through each car in the traffic and draw each car 
+        traffic[i].draw(ctx);
+    }
     car.draw(ctx); //function in the car.js
 
     ctx.restore();
