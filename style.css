@@ -1,17 +1,26 @@
 body {
   margin: 0;
   padding: 0;
-  display: flex;                  /* make body a flexbox */
-  justify-content: center;        /* center canvas horizontally */
-  align-items: center;            /* center canvas vertically */
-  height: 100vh;                  /* full screen height */
-  background: white;               /* dark background for contrast */
+  display: flex;                  /* put canvases side by side */
+  justify-content: center;        /* center the whole group horizontally */
+  align-items: center;            /* center vertically */
+  height: 100vh;
+  background: white;
+  gap: 10px;                      /* small space between canvases */
 }
 
-#gameCanvas {
+#carCanvas {
   background: gray;               /* road background */
-  border: 3px solid black;        /* border around game */
-  /* width: 400px;                   fixed width */
-  /* height: 100vh;                  full viewport height */
-  display: block;                 /* remove inline gap */
+  border: 3px solid black;
+  height: 100vh;                  /* full height */
+  display: block;
+}
+
+#newtworkCanvas {
+  background: black;              /* clean background */
+  border: 3px solid black;
+  width: 600px;                   /*fixed width for NN view */
+   height: 100vh;                    /*full height */
+  display: block;
+  margin-left: 100px;
 }
