@@ -33,15 +33,16 @@ function getIntersection(A, B, C, D) {
         // t between 0 and 1 means the intersection is on segment AB
         // u between 0 and 1 means the intersection is on segment CD
         if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
-            console.log("here ")
+            console.log("bhida")
             return {
-                x: A.x + t * (B.x - A.x),
-                y: A.y + t * (B.y - A.y),
-                offset: t
+                x: A.x + t * (B.x - A.x), //the x coordinate of the collision 
+                y: A.y + t * (B.y - A.y), //the y coordinate of the collision
+                offset: t //offset tells how far along the ray/line segment the collision happened between 0-1
+                //smaller the offset the near they hit 
             };
+
         }
     }
-    // console.log("returned null")
     return null; // no intersection
 }
 

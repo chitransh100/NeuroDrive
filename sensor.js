@@ -1,7 +1,7 @@
 class Sensor{
     constructor(car){
         this.car = car; //the sensor must know where the car is 
-        this.rayCount = 3;
+        this.rayCount = 5;
         this.raySpread = Math.PI/4; // a 45degree angle 
         this.raylength = 100; // this is the length of the ray or the range of the sensors 
 
@@ -34,7 +34,6 @@ class Sensor{
 
         for(let i=0; i<traffic?.length; i++){ //same here if traffic == null return undefined instead of throwing error 
             const poly = traffic[i].polygon;
-            console.log(poly)
             for(let j=0; j<poly?.length; j++){
                 const value = getIntersection(
                     ray[0],

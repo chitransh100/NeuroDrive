@@ -9,7 +9,7 @@ const ctx = canvas.getContext("2d");
 
 
 const road = new Road(canvas.width/2, canvas.width * 0.96) //(center, width * so that the lines of the road has some margin )
-const car = new Car(road.getLaneWidth(1), 100, 30, 50, "KEYS"); //introducing "KEYS" to impement the key functions of our car
+const car = new Car(road.getLaneWidth(1), 100, 30, 50, "AI"); //introducing "KEYS" to impement the key functions of our car
 const traffic = [
     new Car(road.getLaneWidth(1), -100 ,30 ,50, "Traffic") //introducin traffic to implement traffic properties of it 
 ]

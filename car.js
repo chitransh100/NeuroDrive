@@ -29,7 +29,7 @@ class Car {
     this.acceleration = 0.2;
     //introducing friction to stop the car
     this.friction = 0.05;
-    if(controlType == "KEYS"){
+    if(controlType == "KEYS" || controlType == "AI"){
       this.maxSpeed = 3;
     }else{
       this.maxSpeed = 2;
@@ -45,8 +45,17 @@ class Car {
     // |      \
     // |
     // y-axis
-    if(controlType == "KEYS"){
-       this.sensor = new Sensor(this);//creating a new sensor and passing the car to it so that when the car is created the sensor is already created automatically 
+
+    //set teh useBrain to true if the control type is AI;
+    this.useBrain = controlType == "AI"; 
+
+    if(controlType == "KEYS" || controlType == "AI"){
+      //creating a new sensor and passing the car to it so that when the car is created the sensor is already created automatically
+       this.sensor = new Sensor(this); 
+       //creating a neural network 
+       this.brain = new NeuralNetwork( 
+        [this.sensor.rayCount, 6, 4] //passing array of neuron counts for the network the last 4 because of the controls;
+       )
     }else{
       this.color = carColors[Math.floor(Math.random()*carColors.length)]
     }
@@ -65,8 +74,27 @@ class Car {
       this.damaged = this.#assessDamage(roadborder, traffic) //function to detect any intersection between the car borders and the borders;
     }
     // if(controlType == "KEYS") we cant check for the controlTypes in an other function
-    if(this.sensor) //check if the sensor is present or not rather than 
-    this.sensor.update(roadborder, traffic); // so that the sensor gets update when the car is getting updated
+    if(this.sensor){ //check if the sensor is present or not rather than 
+      // so that the sensor gets update when the car is getting updated
+      this.sensor.update(roadborder, traffic); 
+      //as offset tells you how far along the ray/line segment the collision happened and the more close value to 0 the more close the collision occurs 
+      //but in this case if the offsets is high means the object is vey near
+      const offsets = this.sensor.readings.map(s=> s==null ? 0 : 1-s.offset); 
+      //now we have the offsets and now we will send these inputs we are getting from the offsets to the neural network 
+      //originally the first input to the network is the sensor readings so we pass these offsets (high value means the object is close)
+      //these outputs are the control of the car [1, 0, 1, 0] = [forward, left, right, backward]
+      const outputs = NeuralNetwork.feedForward(offsets, this.brain); //brain is object of the neural Network
+      console.log(outputs)
+      if(this.useBrain){
+        this.controls.forward = outputs[0];
+        this.controls.reverse = outputs[1];
+        this.controls.left = outputs[2];
+        this.controls.right = outputs[3];
+
+      }
+
+      
+    }
   }
 
   #assessDamage(roadborder, traffic){
