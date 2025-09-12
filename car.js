@@ -84,7 +84,7 @@ class Car {
       //originally the first input to the network is the sensor readings so we pass these offsets (high value means the object is close)
       //these outputs are the control of the car [1, 0, 1, 0] = [forward, left, right, backward]
       const outputs = NeuralNetwork.feedForward(offsets, this.brain); //brain is object of the neural Network
-      console.log(outputs)
+      // console.log(outputs)
       if(this.useBrain){
         this.controls.forward = outputs[0];
         this.controls.reverse = outputs[1];
@@ -191,7 +191,7 @@ class Car {
 
   
 
-  draw(ctx) {
+  draw(ctx, drawSensor=false) {
     if(this.damaged){
       ctx.fillStyle = "red";
     }
@@ -235,7 +235,7 @@ class Car {
     // ctx.restore(); //????????????????
     // //With save/restore: each shape can be drawn in its own local coordinate system.
     // if(controlType == "KEYS") same here line 46
-    if(this.sensor) //if the sensor object is created then only we can have teh sensors on a car 
+    if(this.sensor && drawSensor) //if the sensor object is created then only we can have teh sensors on a car 
     this.sensor.draw(ctx) //this is to draw the sensor when ever the car is drwan and updated to draw 
   }
 }

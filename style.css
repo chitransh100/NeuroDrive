@@ -1,26 +1,116 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
 body {
-  margin: 0;
-  padding: 0;
-  display: flex;                  /* put canvases side by side */
-  justify-content: center;        /* center the whole group horizontally */
-  align-items: center;            /* center vertically */
-  height: 100vh;
-  background: white;
-  gap: 10px;                      /* small space between canvases */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+    background: linear-gradient(135deg, #1e1e2f, #2a2a3d);
+    color: #fff;
+    overflow: hidden;
 }
 
+/* Car canvas on the left */
 #carCanvas {
-  background: gray;               /* road background */
-  border: 3px solid black;
-  height: 100vh;                  /* full height */
-  display: block;
+    background: #111;
+    border: 2px solid #333;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
 }
 
+/* Network canvas on the right */
 #newtworkCanvas {
-  background: black;              /* clean background */
-  border: 3px solid black;
-  width: 600px;                   /*fixed width for NN view */
-   height: 100vh;                    /*full height */
-  display: block;
-  margin-left: 100px;
+    background: #0d0d0d;
+    border: 2px solid #333;
+    border-radius: 12px;
+    margin-left: 20px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+}
+
+/* Floating button group */
+#vertical\ buttons {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 10;
+}
+
+#vertical\ buttons button {
+    position: relative; /* Needed for tooltips */
+    background: #2d2d44;
+    color: #fff;
+    font-size: 20px;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    transition: all 0.2s ease;
+}
+
+#vertical\ buttons button:hover {
+    background: #3f3f60;
+    transform: scale(1.1);
+}
+
+#vertical\ buttons button:active {
+    transform: scale(0.95);
+    background: #5a5a7a;
+}
+
+/* Custom tooltip styling */
+#vertical\ buttons button::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 110%; /* tooltip appears to the right */
+    top: 50%;
+    transform: translateY(-50%);
+    background: #222;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/* Show tooltip on hover */
+#vertical\ buttons button:hover::after {
+    opacity: 1;
+    transform: translateY(-50%) translateX(5px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    body {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #newtworkCanvas {
+        margin-left: 0;
+        margin-top: 20px;
+    }
+
+    #vertical\ buttons {
+        left: auto;
+        right: 20px;
+    }
+
+    #vertical\ buttons button::after {
+        left: auto;
+        right: 110%; /* tooltip flips to the left on small screens */
+    }
 }
