@@ -29,9 +29,11 @@ class Car {
     this.acceleration = 0.2;
     //introducing friction to stop the car
     this.friction = 0.05;
+    this.controlType = controlType;
     if(controlType == "KEYS" || controlType == "AI"){
       this.maxSpeed = 3;
-    }else{
+    }
+    else if (controlType == "Traffic"){
       this.maxSpeed = 2;
     }
     //introduce an angle
@@ -41,7 +43,7 @@ class Car {
     // ---------------------------> x asix
     // |\  angle from the x-axis
     // |  \
-    // |    \
+    // |    
     // |      \
     // |
     // y-axis
@@ -61,7 +63,16 @@ class Car {
     }
    
     //till now there are no controls of the car so create a new object defining the controls
-    this.controls = new Controls(controlType); //passing such that there must be a object for controls but differenct controls for every car 
+    if(controlType == "AI"){
+      console.log(controlType);
+    this.controls = new Controls("AI"); //passing such that there must be a object for controls but differenct controls for every car 
+    }else if(controlType == "KEYS"){
+      console.log(controlType)
+      this.controls = new Controls("KEYS");
+    }
+    else{
+      this.controls = new Controls("Traffic")
+    }
     //controls will be the object defining the movement of the car
     this.damaged = false; //detecting road borders and the cars did they collide 
   }
@@ -84,16 +95,12 @@ class Car {
       //originally the first input to the network is the sensor readings so we pass these offsets (high value means the object is close)
       //these outputs are the control of the car [1, 0, 1, 0] = [forward, left, right, backward]
       const outputs = NeuralNetwork.feedForward(offsets, this.brain); //brain is object of the neural Network
-      // console.log(outputs)
-      if(this.useBrain){
+      if(this.useBrain && this.controlType == "AI" ){
         this.controls.forward = outputs[0];
         this.controls.reverse = outputs[1];
         this.controls.left = outputs[2];
         this.controls.right = outputs[3];
-
       }
-
-      
     }
   }
 
@@ -137,16 +144,15 @@ class Car {
       y: this.y - Math.cos(Math.PI+this.angle+alpha)*rad,
     })
     return points ;
-    
   }
 
   #move(){ 
     //for up and down
-    if (this.controls.forward) {
+    if (this.controls?.forward) {
       // this.y -= 2; the y increases downwards -> we need some acceleration here
       this.speed += this.acceleration; //v=v+a⋅Δt (Δt = 1sec)
     }
-    if (this.controls.reverse) {
+    if (this.controls?.reverse) {
       // this.y += 1; have to use "this" keyword
       this.speed -= this.acceleration;
     }
@@ -192,6 +198,7 @@ class Car {
   
 
   draw(ctx, drawSensor=false) {
+    if (!this.polygon) return;  // prevents crash
     if(this.damaged){
       ctx.fillStyle = "red";
     }

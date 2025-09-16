@@ -21,6 +21,38 @@ class NeuralNetwork {
         }
         return outputs
     }
+
+    //When we save the best brain, all new cars would act exactly the same if we just copied it.
+    //To keep learning, we need variation → small random tweaks to the neural network weights.
+    //This process is called mutation:
+        // It creates slightly different versions of the best brain.
+        // Some mutations perform worse, but some might perform better than the original.
+    // Over many generations, this lets the cars improve beyond the first best brain, instead of getting stuck.
+    //this function will mutate the value of the biases and weights randomly to increase randomness in the network
+    static mutate(network, amount = 1){ //Introduce small random changes to a neural network (brain) so that new cars aren’t exact copies of the best car.
+        network.levels.forEach(level => {
+            for(let i=0; i<level.biases.length; i++){
+                level.biases[i] = lerp(
+                    level.biases[i],
+                    Math.random()*2-1,
+                    amount,
+                )
+            }
+            // Iterate through each weight and bias in the network.
+            // With a probability equal to mutationRate, add a small random number (mutation) to that weight or bias.
+            // Most weights remain the same; only a few are tweaked.
+            for(let i=0; i<level.weights.length; i++){
+                for(let j=0; j<level.weights[i].length; j++){ //weights is a array of array
+                    level.weights[i][j] = lerp(
+                        level.weights[i][j],
+                        Math.random()*2-1,
+                        amount,
+                    )
+                }   
+            }
+        })
+
+    }
 }
 
 
